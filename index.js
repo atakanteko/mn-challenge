@@ -9,7 +9,15 @@ app.use(express.static('build'))
 app.use(cors())
 app.use(express.json())
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
 
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -48,15 +56,21 @@ app.post('/api/todos', (request, response) => {
 
 app.get('/api/todos/:id', (request, response) => {
   Todo.findById(request.params.id).then(t => {
-    response.json(t)
+    if (t) {
+      response.json(t)
+    } else {
+      response.status(404).end()
+    }
   })
+  .catch(error => next(error))
 })
 
 app.delete('/api/todos/:id', (request, response) => {
-  const id = Number(request.params.id)
-  todos = todos.filter(todo => todo.id !== id)
-
-  response.status(204).end()
+  Todo.findByIdAndRemove(request.params.id)
+  .then(result => {
+    response.status(204).end()
+  })
+  .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -64,6 +78,8 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
