@@ -49,6 +49,29 @@ It reads the required data from the request object and performs logging.
 ### Controllers Folder
 The event handlers of routes are commonly referred to as controllers, and for this reason I have created a new controllers directory. All of the routes related to todos are now in the todos.js module under the controllers  directory.
 
+If the tests need to be able to modify the server's database, the situation immediately becomes more complicated. Ideally, the server's database should be the same each time we run the tests, so our tests can be reliably and easily repeatable.
+
+As with unit and integration tests, with E2E tests it is the best to empty the database and possibly format it before the tests are run. The challenge with E2E tests is that they do not have access to the database.
+
+The solution is to create API endpoints to the backend for the test. I create**testing.js** controller  and I can empty the database using these endpoints by adding this piece 
+
+    const  router  =  require('express').Router()
+    const  Todo  =  require('../models/todo')
+    
+    router.get('/reset',  async  (request,  response)  =>  {
+       await Todo.deleteMany({})
+       response.status(204).end()
+    })
+    module.exports  = router
+
+and add it to the backend only _if the application is run on test-mode_:
+
+    if  (process.env.NODE_ENV  ===  'test')  {
+      const  testingRouter  =  require('./controllers/testing')
+      app.use('/api/testing', testingRouter)
+    }
+
+
 ### Models Folder
 The responsibility of establishing the connection to the database has been given to the  _app.js_  module. The  _todo.js_  file under the  _models_  directory only defines the Mongoose schema for todos.
   
