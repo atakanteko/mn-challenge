@@ -18,11 +18,13 @@ purpose is <b><a href="http://expressjs.com/">express</a></b>.</p>
 
     ├── index.js
     ├── app.js
+    ├── Dockerfile
     ├── Procfile
     ├── build     
         └──...
     ├── controllers    
         └──todos.js
+        └──testing.js
     ├── tests    
         └──test_helper.js
         └──todo_api_test.js
@@ -53,7 +55,7 @@ If the tests need to be able to modify the server's database, the situation imme
 
 As with unit and integration tests, with E2E tests it is the best to empty the database and possibly format it before the tests are run. The challenge with E2E tests is that they do not have access to the database.
 
-The solution is to create API endpoints to the backend for the test. I create**testing.js** controller  and I can empty the database using these endpoints by adding this piece 
+The solution is to create API endpoints to the backend for the test. I create **testing.js** controller  and I can empty the database using these endpoints by adding this piece 
 
     const  router  =  require('express').Router()
     const  Todo  =  require('../models/todo')
