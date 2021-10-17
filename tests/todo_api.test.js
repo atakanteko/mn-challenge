@@ -115,22 +115,6 @@ describe('addition of a new note', () => {
 })
 
 
-
-
-
-/*
-test('there are two todos', async () => {
-  const response = await api.get('/api/todos')
-
-  expect(response.body).toHaveLength(2)
-})
-
-test('the first todo is about Lorem Ipsum', async () => {
-  const response = await api.get('/api/todos')
-
-  expect(response.body[0].content).toBe('HTML is eassy')
-})*/
-
 afterAll(() => {
   mongoose.connection.close()
 })
