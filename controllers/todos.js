@@ -21,6 +21,7 @@ todosRouter.post('/', async (request, response) => {
 
     try{
       const savedToDo = await todo.save()
+      response.status(201)
       response.json(savedToDo.toJSON())
     }catch(ex){
       next(ex)
