@@ -199,3 +199,5 @@ To make the script runnable via Node, we add some scripts to `package.json`:
 
     "pact:providerTests":  "node ./pact/provider_tests.js",
 The script `pact:providerTests` runs the `provider_tests.js` script from above. However, this will only work when the Express server is already running. So, don't forget to run the server.
+	
+![enter image description here](https://github.com/atakanteko/mn-challenge/blob/main/img/testSs.png)
